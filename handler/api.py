@@ -16,7 +16,6 @@ from settings import UPYUN
 from tornado.options import options
 from handler.base import BaseHandler
 from lib.decorator import login_required
-from lib.const import NotifyType, ALL_NOTIFY_TYPES, str_to_notify_type, UserXXXX, str_to_user_xxxx_type
 
 
 class TplsHandler(BaseHandler):

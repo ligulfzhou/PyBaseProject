@@ -9,7 +9,6 @@ from sqlalchemy.sql.expression import func, desc, asc, or_
 from settings import DB_OA
 from mysql.base import NotNullColumn, Base
 from lib.decorator import model_to_dict, models_to_list, filter_update_data
-from lib.const import NotifyType, ALL_NOTIFY_TYPES
 
 
 class Tpl(Base):

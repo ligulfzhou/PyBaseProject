@@ -37,10 +37,10 @@ A_MONTH = A_DAY * 30
 UPYUN = {
     'api': 'http://v0.api.upyun.com/',
     'bucket': 'madan-image',
-    'secret': 'fFHuYevvz22TCi36PheBVp/hdJ8=',
+    'secret': '***********',
     'cdn': 'http://madan-image.b0.aicdn.com',
-    'username': 'ligulfzhou53',
-    'password': '$UPYUNzlg153'
+    'username': '*******',
+    'password': '********'
 }
 
 # error msg

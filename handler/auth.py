@@ -26,39 +26,19 @@ class VerifyCodeHandler(BaseHandler):
             logging.error(e)
             raise utils.APIError(errcode=10001)
 
+        # not implemented
         code = await ctrl.api.send_verify_code_ctl(phone_num)
         self.send_json()
 
 
 class LoginHandler(BaseHandler):
 
-    async def post(self):
-        try:
-            phone_num = self.get_argument('phone_num')
-            code = self.get_argument('code')
-
-        except Exception as e:
-            logging.error(e)
-            raise utils.APIError(errcode=10001)
-
-        if not ctrl.api.check_verify_code_ctl(phone_num, code):
-            raise utils.APIError(10002)
-
-        user = ctrl.api.get_user_ctl(phone_num=phone_num)
-        if not user:
-            user = ctrl.api.add_model('User', {
-                'phone_num': phone_num
-            })
-
-        self._login(user)
-        self.send_json({
-            'user': user
-        })
+    def post(self):
+        self.send_json()
 
 
 class LogoutHandler(BaseHandler):
 
     @login_required
     def post(self):
-        self.clear_all_cookies()
         self.send_json()
