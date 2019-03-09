@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from control.base import BaseCtrl
 from control.api import ApiCtrl
 from control.cache import rs
 from mysql import pdb
@@ -13,6 +14,7 @@ class Ctrl(object):
         self.pdb = pdb
         self.rs = rs
 
+        self.base = BaseCtrl(self)
         self.api = ApiCtrl(self)
 
     def __method_ren(self):

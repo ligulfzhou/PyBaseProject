@@ -11,11 +11,11 @@ from mysql.base import NotNullColumn, Base
 from lib.decorator import model_to_dict, models_to_list, filter_update_data
 
 
-class Tpl(Base):
-    __tablename__ = 'tpl'
-
-    id = Column(INTEGER(11), primary_key=True)
-    name = NotNullColumn(VARCHAR(64))
+# class Tpl(Base):
+#     __tablename__ = 'tpl'
+# 
+#     id = Column(INTEGER(11), primary_key=True)
+#     name = NotNullColumn(VARCHAR(64))
 
 
 class APIModel(object):
@@ -72,7 +72,4 @@ class APIModel(object):
         self.master.query(c).filter_by(id=pk).update(data)
         self.master.commit()
 
-    @model_to_dict
-    def get_user_cate(self, user_id, cate_id):
-        return self.master.query(UserCate).filter_by(user_id=user_id, cate_id=cate_id).scalar()
 

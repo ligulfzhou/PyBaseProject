@@ -14,14 +14,14 @@ MYSQL_DB = {
         'master': {
             'host': 'localhost',
             'user': 'root',
-            'pass': 'MYSQLzhouligang153',
+            'pass': '$MYSQLzlg153',
             'port': 3306
         },
         'slaves': [
             {
                 'host': 'localhost',
                 'user': 'root',
-                'pass': 'MYSQLzhouligang153',
+                'pass': '$MYSQLzlg153',
                 'port': 3306
             }
         ]
