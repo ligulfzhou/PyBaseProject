@@ -44,18 +44,30 @@ class APIModel(object):
                 q = q.filter(getattr(c, k)==v)
         return q.scalar()
 
-    @models_to_list
-    def get_models(self, model, filters={}, offset=0, limit=0, page=0, page_size=100, order_by=''):
+    def get_model_count(self, model, filters=[]):
         c = eval(model)
         q = self.slave.query(c)
-        for k, v in filters.items():
+        for kv in filters:
+            k, v = list(kv.items())[0]
             if isinstance(v, list):
                 q = q.filter(getattr(c, k).in_(tuple(v)))
             else:
                 q = q.filter(getattr(c, k)==v)
+        v = q.count()
+        if v:
+            return int(v)
+        return 0
 
-        if order_by:
-            q = q.order_by(order_by)
+    @models_to_list
+    def get_models(self, model, filters=[], offset=0, limit=0, page=0, page_size=100, order_by=''):
+        c = eval(model)
+        q = self.slave.query(c)
+        for kv in filters:
+            k, v = list(kv.items())[0]
+            if isinstance(v, list):
+                q = q.filter(getattr(c, k).in_(tuple(v)))
+            else:
+                q = q.filter(getattr(c, k)==v)
 
         if not (offset or limit) and not page:
             pass
@@ -65,11 +77,28 @@ class APIModel(object):
                 offset = (page - 1) * page_size
                 limit = page_size
             q = q.offset(offset).limit(limit)
-        return q.order_by(c.create_time.desc()).all()
+
+        if order_by:
+            q = q.order_by(getattr(c, order_by).desc())
+        else:
+            q = q.order_by(c.create_time.desc())
+
+        return q.all()
 
     def update_model(self, model, pk, data={}):
         c = eval(model)
         self.master.query(c).filter_by(id=pk).update(data)
         self.master.commit()
 
+    def delete_modal(self, model, filters=[]):
+        c = eval(model)
+        q = self.master.query(c)
+        for kv in filters:
+            k, v = list(kv.items())[0]
+            if isinstance(v, list):
+                q = q.filter(getattr(c, k).in_(v))
+            else:
+                q = q.filter(getattr(c, k)==v)
+        q = q.delete(synchronize_session=False)
+        self.master.commit()
 
