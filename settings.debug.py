@@ -8,8 +8,8 @@ REDIS = {
     'password': None
 }
 
-MYSQL_DB['xwx']['slaves'] = []
-MYSQL_DB['xwx']['master'] = {
+MYSQL_DB['DB_NAME']['slaves'] = []
+MYSQL_DB['DB_NAME']['master'] = {
     'host': 'localhost',
     'user': 'root',
     'pass': '$MYSQLzlg153',

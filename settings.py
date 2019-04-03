@@ -10,7 +10,7 @@ REDIS = {
 }
 
 # mysql
-DB_OA = 'gifmaker'
+DB_OA = 'DB_NAME'
 MYSQL_DB = {
     DB_OA: {
         'master': {
