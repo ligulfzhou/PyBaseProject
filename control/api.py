@@ -17,8 +17,6 @@ from tornado.gen import coroutine
 from tornado.options import options
 from tornado import httputil
 
-from lib.const import NotifyType, ALL_NOTIFY_TYPES, UserXXXX, ALL_USER_XXXX_TYPES
-
 
 class ApiCtrl(object):
 
