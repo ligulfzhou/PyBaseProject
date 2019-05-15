@@ -13,9 +13,30 @@ from lib.decorator import model_to_dict, models_to_list, filter_update_data
 
 # class Tpl(Base):
 #     __tablename__ = 'tpl'
-# 
+#
 #     id = Column(INTEGER(11), primary_key=True)
 #     name = NotNullColumn(VARCHAR(64))
+
+class Company(Base):
+    __tablename__ = 'company'
+
+    id = Column(INTEGER(11), primary_key=True)
+    name = NotNullColumn(VARCHAR(64))
+    url = NotNullColumn(VARCHAR(1024))
+    city = NotNullColumn(VARCHAR(64))
+    country = NotNullColumn(VARCHAR(64))
+    dt = NotNullColumn(VARCHAR(32))
+    tt = NotNullColumn(VARCHAR(1024))
+    tp = NotNullColumn(TINYINT(1))
+
+
+class Ref(Base):
+    __tablename__ = 'ref'
+
+    id = Column(INTEGER(11), primary_key=True)
+    company_id = NotNullColumn(INTEGER(11))
+    title = NotNullColumn(VARCHAR(1024))
+    url = NotNullColumn(VARCHAR(1024))
 
 
 class APIModel(object):
@@ -32,6 +53,14 @@ class APIModel(object):
         self.master.add(m)
         self.master.commit()
         return m
+
+    @models_to_list
+    def add_models(self, model, kv_list=[]):
+        c = eval(model)
+        models = [c(**kv) for kv in kv_list]
+        [self.master.add(m) for m in models]
+        self.master.commit()
+        return models
 
     @model_to_dict
     def get_model(self, model, filters={}):
@@ -69,6 +98,11 @@ class APIModel(object):
             else:
                 q = q.filter(getattr(c, k)==v)
 
+        if order_by:
+            q = q.order_by(getattr(c, order_by).desc())
+        else:
+            q = q.order_by(c.id.desc())
+
         if not (offset or limit) and not page:
             pass
         else:
@@ -77,11 +111,6 @@ class APIModel(object):
                 offset = (page - 1) * page_size
                 limit = page_size
             q = q.offset(offset).limit(limit)
-
-        if order_by:
-            q = q.order_by(getattr(c, order_by).desc())
-        else:
-            q = q.order_by(c.create_time.desc())
 
         return q.all()
 

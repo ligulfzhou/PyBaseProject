@@ -10,7 +10,7 @@ REDIS = {
 }
 
 # mysql
-DB_OA = 'DB_NAME'
+DB_OA = '996icu'
 MYSQL_DB = {
     DB_OA: {
         'master': {
