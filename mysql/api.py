@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import pdb
 import datetime
 from sqlalchemy import Column, extract, distinct
@@ -11,11 +12,40 @@ from mysql.base import NotNullColumn, Base
 from lib.decorator import model_to_dict, models_to_list, filter_update_data
 
 
-# class Tpl(Base):
-#     __tablename__ = 'tpl'
-#
-#     id = Column(INTEGER(11), primary_key=True)
-#     name = NotNullColumn(VARCHAR(64))
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(INTEGER(11), primary_key=True)
+    uuid = NotNullColumn(VARCHAR(32))
+    github_id = NotNullColumn(INTEGER(11))
+    username = NotNullColumn(VARCHAR(64))
+    gender = NotNullColumn(TINYINT(1))
+    city = NotNullColumn(VARCHAR(256))
+    province = NotNullColumn(VARCHAR(256))
+    country = NotNullColumn(VARCHAR(256))
+    avatarurl = NotNullColumn(VARCHAR(1024))
+    unionid = NotNullColumn(VARCHAR(64))
+    device_token = NotNullColumn(VARCHAR(64))
+    title = NotNullColumn(VARCHAR(1024))
+
+
+class Post(Base):
+    __tablename__ = 'post'
+
+    id = Column(INTEGER(11), primary_key=True)
+    user_id = NotNullColumn(INTEGER(11))
+    company_id = NotNullColumn(INTEGER(11))
+    title = NotNullColumn(VARCHAR(1024))
+    content = NotNullColumn(TEXT)
+
+
+class PostImage(Base):
+    __tablename__ = 'post_image'
+
+    id = Column(INTEGER(11), primary_key=True)
+    post_id = NotNullColumn(INTEGER(11))
+    url = NotNullColumn(VARCHAR(1024))
+
 
 class Company(Base):
     __tablename__ = 'company'
