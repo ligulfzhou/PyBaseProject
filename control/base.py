@@ -99,6 +99,19 @@ class BaseCtrl(object):
 
         return companies
 
+    def post_merge_more_fields(self, posts):
+        post_ids = [p['id'] for p in posts]
+        post_images = self.api.get_models('PostImage', [{'post_id': post_ids}])
+        pid_images_dict = {}
+        [pid_images_dict.setdefault(i['post_id'], []).append(i) for i in post_images]
+
+        for post in posts:
+            images = pid_images_dict.get(post['id'], [])
+            post.update({
+                'post_images': images
+            })
+        return posts
+
     def _get_multi_items(self, tb_name, ids, get_item_key_func=None, merge_item_func=None, put_items_to_rs=None):
         if not ids:
             return []

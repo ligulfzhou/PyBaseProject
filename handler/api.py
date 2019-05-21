@@ -35,6 +35,22 @@ class CompanyListHandler(BaseHandler):
         })
 
 
+class PostListHandler(BaseHandler):
+
+    def get(self):
+        try:
+            page = int(self.get_argument('page', 1))
+            page_size = int(self.get_argument('page_size', 20))
+        except Exception as e:
+            logging.error(e)
+            raise utils.APIError(errcode=10001)
+
+        posts = ctrl.api.get_post_list_ctl(page, page_size)
+        self.send_json({
+            'posts': posts
+        })
+
+
 class TplsHandler(BaseHandler):
 
     def get(self):

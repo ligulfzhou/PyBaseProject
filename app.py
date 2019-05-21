@@ -13,6 +13,7 @@ URLS = [
     (r'sudo\.madan\.tech',
         (r'/api/tpls', 'handler.api.TplsHandler'),
         (r'/api/companies', 'handler.api.CompanyListHandler'),
+        (r'/api/posts', 'handler.api.PostListHandler'),
 
         (r'/api/upyun', 'handler.api.UpyunHandler'),
     )
