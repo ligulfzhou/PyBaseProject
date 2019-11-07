@@ -34,7 +34,10 @@ class APIModel(object):
         return m
 
     @model_to_dict
-    def get_model(self, model, filters={}):
+    def get_model(self, model, filters=[]):
+        '''
+        filters = [{'name':xxx}, {'sex': 1}]
+        '''
         c = eval(model)
         q = self.slave.query(c)
         for kv in filters:
