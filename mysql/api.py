@@ -37,7 +37,8 @@ class APIModel(object):
     def get_model(self, model, filters={}):
         c = eval(model)
         q = self.slave.query(c)
-        for k, v in filters.items():
+        for kv in filters:
+            k, v = list(kv.items())[0]
             if isinstance(v, list):
                 q = q.filter(getattr(c, k).in_(tuple(v)))
             else:
