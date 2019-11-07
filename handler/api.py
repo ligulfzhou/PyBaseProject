@@ -18,6 +18,39 @@ from handler.base import BaseHandler
 from lib.decorator import login_required
 
 
+class CompanyListHandler(BaseHandler):
+
+    def get(self):
+        try:
+            tp = int(self.get_argument('tp', None) or 0)
+            page = int(self.get_argument('page', 1))
+            page_size = int(self.get_argument('page_size', 20))
+        except Exception as e:
+            logging.error(e)
+            raise utils.APIError(errcode=10001)
+
+        companies = ctrl.api.get_company_list_ctl(tp, page, page_size)
+        self.send_json({
+            'companies': companies
+        })
+
+
+class PostListHandler(BaseHandler):
+
+    def get(self):
+        try:
+            page = int(self.get_argument('page', 1))
+            page_size = int(self.get_argument('page_size', 20))
+        except Exception as e:
+            logging.error(e)
+            raise utils.APIError(errcode=10001)
+
+        posts = ctrl.api.get_post_list_ctl(page, page_size)
+        self.send_json({
+            'posts': posts
+        })
+
+
 class TplsHandler(BaseHandler):
 
     def get(self):

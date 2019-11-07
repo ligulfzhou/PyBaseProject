@@ -55,7 +55,7 @@ class BaseCtrl(object):
             return
 
         if not get_item_key_func:
-            get_item_key_func = partial(self.get_model_key_ctl, model=tb_name)
+            get_item_key_func = partial(self.get_model_key_ctl, model=tb_name.lower())
 
         k_v_dict = {get_item_key_func(model_id=item['id']): pickle.dumps(item) for item in items}
         pl = self.ctrl.rs.pipeline(transaction=True)
@@ -82,6 +82,35 @@ class BaseCtrl(object):
             'hot': id_hot_dict.get(effi['id'], 0)
         }) for effi in effis]
         return effis
+
+    def company_merge_more_fields(self, companies):
+        cids = [c['id'] for c in companies]
+
+        refs = self.api.get_models('Ref', [{
+            'company_id': cids
+        }])
+        [company.update({'refs': []}) for company in companies]
+        id_company_dict = {c['id']: c for c in companies}
+        res = []
+        for ref in refs:
+            # company.setdefault('refs', []).append()
+            company = id_company_dict.get(ref['company_id'], {})
+            company.get('refs', []).append(ref)
+
+        return companies
+
+    def post_merge_more_fields(self, posts):
+        post_ids = [p['id'] for p in posts]
+        post_images = self.api.get_models('PostImage', [{'post_id': post_ids}])
+        pid_images_dict = {}
+        [pid_images_dict.setdefault(i['post_id'], []).append(i) for i in post_images]
+
+        for post in posts:
+            images = pid_images_dict.get(post['id'], [])
+            post.update({
+                'post_images': images
+            })
+        return posts
 
     def _get_multi_items(self, tb_name, ids, get_item_key_func=None, merge_item_func=None, put_items_to_rs=None):
         if not ids:

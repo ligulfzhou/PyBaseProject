@@ -8,11 +8,11 @@ REDIS = {
     'password': None
 }
 
-MYSQL_DB['DB_NAME']['slaves'] = []
-MYSQL_DB['DB_NAME']['master'] = {
+MYSQL_DB['996icu']['slaves'] = []
+MYSQL_DB['996icu']['master'] = {
     'host': 'localhost',
     'user': 'root',
-    'pass': '$MYSQLzlg153',
+    'pass': 'MYSQLzhouligang153',
     'port': 3306
 }
 
