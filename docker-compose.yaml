@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+    mysql: 
+        image: mysql:5.7
+        ports:
+            - "33060:3306"
+        volumes:
+            - ./db:/docker-entrypoint-initdb.d/:ro
+        environment:
+            MYSQL_ROOT_PASSWORD: MYSQLzlg153
+            MYSQL_DATABASE: db
+            MYSQL_USER: zlg
+            MYSQL_PASSWORD: MYSQLzlg153
+
+    redis:
+        image: redis:5
+
+    app:
+        build: .
+        ports:
+            - "9090:9090"
+        volumes:
+            - .:/app
+        depends_on:
+            - redis
+            - mysql

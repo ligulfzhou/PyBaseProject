@@ -10,20 +10,20 @@ REDIS = {
 }
 
 # mysql
-DB_OA = '996icu'
+DB_OA = 'db'
 MYSQL_DB = {
     DB_OA: {
         'master': {
-            'host': 'localhost',
-            'user': 'root',
-            'pass': '$MYSQLzlg153',
+            'host': '127.0.0.1',
+            'user': 'zlg',
+            'pass': 'MYSQLzlg153',
             'port': 3306
         },
         'slaves': [
             {
-                'host': 'localhost',
-                'user': 'root',
-                'pass': '$MYSQLzlg153',
+                'host': '127.0.0.1',
+                'user': 'zlg',
+                'pass': 'MYSQLzlg153',
                 'port': 3306
             }
         ]

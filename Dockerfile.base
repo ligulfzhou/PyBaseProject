@@ -1,0 +1,14 @@
+FROM python:3.8-alpine3.10
+
+WORKDIR /app
+
+ADD requirements.txt /app/requirements.txt
+
+RUN apk add --update mysql-dev gcc mysql-client build-base curl-dev libffi-dev bash && rm -rf /var/cache/apk/* && pip install -r requirements.txt && pip install --no-cache-dir --compile --ignore-installed --install-option="--with-openssl" pycurl
+
+CMD ["bash"]
+
+
+
+# i use this to build pybase image
+# docker build -t pybase:latest .

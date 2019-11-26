@@ -2,17 +2,17 @@
 # -*- coding: utf-8 -*-
 
 REDIS = {
-    'host': '127.0.0.1',
+    'host': 'redis',
     'port': 6379,
     'db': 0,
     'password': None
 }
 
-MYSQL_DB['996icu']['slaves'] = []
-MYSQL_DB['996icu']['master'] = {
-    'host': 'localhost',
-    'user': 'root',
-    'pass': 'MYSQLzhouligang153',
+MYSQL_DB['db']['slaves'] = []
+MYSQL_DB['db']['master'] = {
+    'host': 'mysql',
+    'user': 'zlg',
+    'pass': 'MYSQLzlg153',
     'port': 3306
 }
 
