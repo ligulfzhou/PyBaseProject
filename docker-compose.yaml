@@ -4,17 +4,20 @@ services:
     mysql: 
         image: mysql:5.7
         ports:
-            - "33060:3306"
+            - "3306:3306"
         volumes:
-            - ./db:/docker-entrypoint-initdb.d/:ro
+            - ./db:/docker-entrypoint-initdb.d
+        command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
         environment:
             MYSQL_ROOT_PASSWORD: MYSQLzlg153
             MYSQL_DATABASE: db
             MYSQL_USER: zlg
             MYSQL_PASSWORD: MYSQLzlg153
+        restart: always
 
     redis:
         image: redis:5
+        restart: always
 
     app:
         build: .
@@ -22,6 +25,10 @@ services:
             - "9090:9090"
         volumes:
             - .:/app
+        restart: always
+        links:
+            - "redis:redis"
+            - "mysql:mysql"
         depends_on:
             - redis
             - mysql

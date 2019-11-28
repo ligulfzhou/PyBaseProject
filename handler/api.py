@@ -18,21 +18,28 @@ from handler.base import BaseHandler
 from lib.decorator import login_required
 
 
-class CompanyListHandler(BaseHandler):
+class AppListHandler(BaseHandler):
 
     def get(self):
+        apps = ctrl.api.get_app_list_ctl()
+        self.send_json({
+            'apps': apps
+        })
+
+    def post(self):
         try:
-            tp = int(self.get_argument('tp', None) or 0)
-            page = int(self.get_argument('page', 1))
-            page_size = int(self.get_argument('page_size', 20))
+            name_cn = self.get_argument('name_cn')
+            name_en = self.get_argument('name_en')
         except Exception as e:
             logging.error(e)
             raise utils.APIError(errcode=10001)
 
-        companies = ctrl.api.get_company_list_ctl(tp, page, page_size)
-        self.send_json({
-            'companies': companies
+        ctrl.api.add_model("App", {
+            'name_cn': name_cn,
+            'name_en': name_en
         })
+        ctrl.rs.delete(ctrl.api.get_app_list_key_ctl())
+        self.send_json()
 
 
 class PostListHandler(BaseHandler):

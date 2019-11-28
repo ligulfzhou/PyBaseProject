@@ -12,6 +12,20 @@ from mysql.base import NotNullColumn, Base
 from lib.decorator import model_to_dict, models_to_list, filter_update_data
 
 
+class App(Base):
+    __tablename__ = 'app'
+
+    id = Column(INTEGER(11), primary_key=True)
+    icon = NotNullColumn(VARCHAR(1024))
+    name_cn = NotNullColumn(VARCHAR(128))
+    name_en = NotNullColumn(VARCHAR(128))
+    des_cn = NotNullColumn(VARCHAR(1024))
+    des_en = NotNullColumn(VARCHAR(1024))
+    appleid = NotNullColumn(INTEGER(11))
+    status = NotNullColumn(TINYINT(1))
+    url_scheme = NotNullColumn(VARCHAR(32))
+
+
 class User(Base):
     __tablename__ = 'user'
 

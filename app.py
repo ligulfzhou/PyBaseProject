@@ -12,7 +12,7 @@ from tornado.httpserver import HTTPServer
 URLS = [
     (r'sudo\.madan\.tech',
         (r'/api/tpls', 'handler.api.TplsHandler'),
-        (r'/api/companies', 'handler.api.CompanyListHandler'),
+        (r'/api/apps', 'handler.api.AppListHandler'),
         (r'/api/posts', 'handler.api.PostListHandler'),
 
         (r'/api/upyun', 'handler.api.UpyunHandler'),
