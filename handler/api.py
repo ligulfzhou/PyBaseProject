@@ -81,10 +81,4 @@ class UpyunHandler(BaseHandler):
             'content-length-range': '1, 1073741824'
         })
 
-        # origin = self.request.headers.get("Origin")
-        # origin = '*' if not origin else origin
-        # self.set_header("Access-Control-Allow-Origin", origin)
-        # self.set_header("Access-Control-Allow-Credentials", "true")
-        # self.set_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type')
-        # self.set_header('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, DELETE')
         self.send_json(dict(upyun=upyun_data, CDN_HOST=UPYUN['cdn']))

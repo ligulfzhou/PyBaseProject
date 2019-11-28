@@ -27,9 +27,12 @@ class BaseHandler(web.RequestHandler):
         ctrl.pdb.close()
 
     def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Access-Control-Allow-Headers", "access-control-allow-origin,authorization,content-type,content-type,access-control-allow-headers,x-requested-with,accept")
-        self.set_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+        origin = self.request.headers.get("Origin")
+        origin = '*' if not origin else origin
+        self.set_header("Access-Control-Allow-Origin", origin)
+        self.set_header("Access-Control-Allow-Credentials", "true")
+        self.set_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type')
+        self.set_header('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, DELETE')
 
     def json_format(self, obj):
         if isinstance(obj, datetime.datetime):
