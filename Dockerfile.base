@@ -9,8 +9,5 @@ RUN apk add --update mysql-dev gcc mysql-client build-base curl-dev libffi-dev b
 CMD ["bash"]
 
 
-
-
-
 # i use this to build pybase image
 # docker build -t pybase:latest .

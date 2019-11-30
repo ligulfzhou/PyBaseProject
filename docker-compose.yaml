@@ -7,6 +7,7 @@ services:
             - "3306:3306"
         volumes:
             - ./db:/docker-entrypoint-initdb.d
+            - ./db-data:/var/lib/mysql
         command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
         environment:
             MYSQL_ROOT_PASSWORD: MYSQLzlg153
