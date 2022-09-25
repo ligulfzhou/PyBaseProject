@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from sqlalchemy import Column
 from functools import partial
 from sqlalchemy.ext.declarative import declarative_base, declared_attr

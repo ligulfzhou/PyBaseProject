@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import random
 import logging
 
@@ -15,6 +12,7 @@ from mysql.api import APIModel
 def create_session(engine):
     if not engine:
         return None
+
     session = scoped_session(sessionmaker(bind=engine))
     return session()
 

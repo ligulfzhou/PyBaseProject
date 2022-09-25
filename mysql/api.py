@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import pdb
 import datetime
 from sqlalchemy import Column, extract, distinct

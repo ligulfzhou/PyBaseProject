@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from control.base import BaseCtrl
 from control.api import ApiCtrl
 from control.cache import rs

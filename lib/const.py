@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 class NotifyType:
     FOLLOW = 0
     COMMENT = 1

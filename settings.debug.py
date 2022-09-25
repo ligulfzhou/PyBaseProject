@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 REDIS = {
     'host': 'redis',
     'port': 6379,

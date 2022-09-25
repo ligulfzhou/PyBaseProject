@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 # redis
 REDIS = {
     'host': '127.0.0.1',

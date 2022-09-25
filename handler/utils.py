@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import os
 import pdb
 import time
@@ -14,7 +11,6 @@ import random
 from PIL import Image
 from io import StringIO, BytesIO
 from lib import utils
-from lib.const import tooltip_dict
 from control import ctrl
 from urllib.parse import unquote
 from tornado.web import stream_request_body
@@ -30,7 +26,7 @@ class UploadHandler(BaseHandler):
 
     def data_received(self, chunk):
         self.bytes_read += len(chunk)
-        self.bytes += thunk
+        self.bytes += chunk
 
     @login_required
     def post(self):
