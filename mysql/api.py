@@ -1,10 +1,10 @@
+from settings import DB_OA
+from typing import Dict, List, Optional
+from mysql.base import NotNullColumn, Base
+from lib.decorator import model_to_dict, models_to_list, filter_update_data
 from sqlalchemy import Column, extract, distinct
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, ENUM, TINYINT, DATE, DATETIME, DECIMAL, TIMESTAMP, TEXT, BLOB
 from sqlalchemy.sql.expression import func, desc, asc, or_
-
-from settings import DB_OA
-from mysql.base import NotNullColumn, Base
-from lib.decorator import model_to_dict, models_to_list, filter_update_data
 
 
 class App(Base):
@@ -48,14 +48,6 @@ class Post(Base):
     content = NotNullColumn(TEXT)
 
 
-class PostImage(Base):
-    __tablename__ = 'post_image'
-
-    id = Column(INTEGER(11), primary_key=True)
-    post_id = NotNullColumn(INTEGER(11))
-    url = NotNullColumn(VARCHAR(1024))
-
-
 class Company(Base):
     __tablename__ = 'company'
 
@@ -86,7 +78,7 @@ class APIModel(object):
         self.slave = pdb.get_session(DB_OA)
 
     @model_to_dict
-    def add_model(self, model, kv={}):
+    def add_model(self, model, kv: Dict):
         c = eval(model)
         m = c(**kv)
         self.master.add(m)
@@ -94,15 +86,16 @@ class APIModel(object):
         return m
 
     @models_to_list
-    def add_models(self, model, kv_list=[]):
+    def add_models(self, model, kv_list: List[Dict]):
         c = eval(model)
         models = [c(**kv) for kv in kv_list]
-        [self.master.add(m) for m in models]
+        # [self.master.add(m) for m in models]
+        self.master.bulk_add_objects(models)
         self.master.commit()
         return models
 
     @model_to_dict
-    def get_model(self, model, filters=[]):
+    def get_model(self, model, filters: List[Dict]) -> Optional[Dict]:
         '''
         filters = [{'name':xxx}, {'sex': 1}]
         '''
@@ -113,10 +106,10 @@ class APIModel(object):
             if isinstance(v, list):
                 q = q.filter(getattr(c, k).in_(tuple(v)))
             else:
-                q = q.filter(getattr(c, k)==v)
+                q = q.filter(getattr(c, k) == v)
         return q.scalar()
 
-    def get_model_count(self, model, filters=[]):
+    def get_model_count(self, model, filters: Optional[Dict]) -> int:
         c = eval(model)
         q = self.slave.query(c)
         for kv in filters:
@@ -124,14 +117,15 @@ class APIModel(object):
             if isinstance(v, list):
                 q = q.filter(getattr(c, k).in_(tuple(v)))
             else:
-                q = q.filter(getattr(c, k)==v)
+                q = q.filter(getattr(c, k) == v)
         v = q.count()
         if v:
             return int(v)
         return 0
 
     @models_to_list
-    def get_models(self, model, filters=[], offset=0, limit=0, page=0, page_size=100, order_by=''):
+    def get_models(self, model: str, filters: List[Dict], offset: int = 0, limit: int = 0, page: int = 0,
+                   page_size: int = 100, order_by: str = '') -> List[Dict]:
         c = eval(model)
         q = self.slave.query(c)
         for kv in filters:
@@ -139,7 +133,7 @@ class APIModel(object):
             if isinstance(v, list):
                 q = q.filter(getattr(c, k).in_(tuple(v)))
             else:
-                q = q.filter(getattr(c, k)==v)
+                q = q.filter(getattr(c, k) == v)
 
         if order_by:
             q = q.order_by(getattr(c, order_by).desc())
@@ -157,12 +151,12 @@ class APIModel(object):
 
         return q.all()
 
-    def update_model(self, model, pk, data={}):
+    def update_model(self, model, pk, data: Dict) -> None:
         c = eval(model)
         self.master.query(c).filter_by(id=pk).update(data)
         self.master.commit()
 
-    def delete_modal(self, model, filters=[]):
+    def delete_modal(self, model, filters: List[Dict]) -> None:
         c = eval(model)
         q = self.master.query(c)
         for kv in filters:
@@ -170,7 +164,6 @@ class APIModel(object):
             if isinstance(v, list):
                 q = q.filter(getattr(c, k).in_(v))
             else:
-                q = q.filter(getattr(c, k)==v)
+                q = q.filter(getattr(c, k) == v)
         q = q.delete(synchronize_session=False)
         self.master.commit()
-
