@@ -1,7 +1,7 @@
 from control.base import BaseCtrl
 from control.api import ApiCtrl
 from control.cache import rs
-from mysql import pdb
+from mydb import pdb
 
 
 class Ctrl(object):

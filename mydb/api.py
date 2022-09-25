@@ -1,73 +1,66 @@
 from settings import DB_OA
 from typing import Dict, List, Optional
-from mysql.base import NotNullColumn, Base
-from lib.decorator import model_to_dict, models_to_list, filter_update_data
+from sqlalchemy.ext.declarative import declarative_base
+from lib.decorator import model_to_dict, models_to_list
 from sqlalchemy import Column, extract, distinct
-from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, ENUM, TINYINT, DATE, DATETIME, DECIMAL, TIMESTAMP, TEXT, BLOB
 from sqlalchemy.sql.expression import func, desc, asc, or_
+from sqlalchemy.dialects.postgresql import TEXT, BIGINT, INTEGER
+
+Base = declarative_base()
 
 
 class App(Base):
     __tablename__ = 'app'
 
-    id = Column(INTEGER(11), primary_key=True)
-    icon = NotNullColumn(VARCHAR(1024))
-    name_cn = NotNullColumn(VARCHAR(128))
-    name_en = NotNullColumn(VARCHAR(128))
-    des_cn = NotNullColumn(VARCHAR(1024))
-    des_en = NotNullColumn(VARCHAR(1024))
-    appleid = NotNullColumn(INTEGER(11))
-    status = NotNullColumn(TINYINT(1))
-    url_scheme = NotNullColumn(VARCHAR(32))
+    id = Column(INTEGER, primary_key=True)
+    icon = Column(TEXT)
+    name_cn = Column(TEXT)
+    name_en = Column(TEXT)
+    des_cn = Column(TEXT)
+    des_en = Column(TEXT)
+    appleid = Column(INTEGER)
+    status = Column(INTEGER)
+    url_scheme = Column(TEXT)
 
 
 class User(Base):
     __tablename__ = 'user'
 
-    id = Column(INTEGER(11), primary_key=True)
-    uuid = NotNullColumn(VARCHAR(32))
-    github_id = NotNullColumn(INTEGER(11))
-    username = NotNullColumn(VARCHAR(64))
-    gender = NotNullColumn(TINYINT(1))
-    city = NotNullColumn(VARCHAR(256))
-    province = NotNullColumn(VARCHAR(256))
-    country = NotNullColumn(VARCHAR(256))
-    avatarurl = NotNullColumn(VARCHAR(1024))
-    unionid = NotNullColumn(VARCHAR(64))
-    device_token = NotNullColumn(VARCHAR(64))
-    title = NotNullColumn(VARCHAR(1024))
+    id = Column(INTEGER, primary_key=True)
+    uuid = Column(TEXT)
+    github_id = Column(INTEGER)
+    username = Column(TEXT)
+    gender = Column(INTEGER)
+    city = Column(TEXT)
+    province = Column(TEXT)
+    country = Column(TEXT)
+    avatarurl = Column(TEXT)
+    unionid = Column(TEXT)
+    device_token = Column(TEXT)
+    title = Column(TEXT)
 
 
 class Post(Base):
     __tablename__ = 'post'
 
-    id = Column(INTEGER(11), primary_key=True)
-    user_id = NotNullColumn(INTEGER(11))
-    company_id = NotNullColumn(INTEGER(11))
-    title = NotNullColumn(VARCHAR(1024))
-    content = NotNullColumn(TEXT)
+    id = Column(INTEGER, primary_key=True)
+    user_id = Column(INTEGER)
+    company_id = Column(INTEGER)
+    title = Column(TEXT)
+    content = Column(TEXT)
 
 
 class Company(Base):
     __tablename__ = 'company'
 
-    id = Column(INTEGER(11), primary_key=True)
-    name = NotNullColumn(VARCHAR(64))
-    url = NotNullColumn(VARCHAR(1024))
-    city = NotNullColumn(VARCHAR(64))
-    country = NotNullColumn(VARCHAR(64))
-    dt = NotNullColumn(VARCHAR(32))
-    tt = NotNullColumn(VARCHAR(1024))
-    tp = NotNullColumn(TINYINT(1))
-
-
-class Ref(Base):
-    __tablename__ = 'ref'
-
-    id = Column(INTEGER(11), primary_key=True)
-    company_id = NotNullColumn(INTEGER(11))
-    title = NotNullColumn(VARCHAR(1024))
-    url = NotNullColumn(VARCHAR(1024))
+    id = Column(INTEGER, primary_key=True)
+    name = Column(TEXT)
+    url = Column(TEXT)
+    city = Column(TEXT)
+    country = Column(TEXT)
+    dt = Column(TEXT)
+    tt = Column(TEXT)
+    tp = Column(INTEGER)
 
 
 class APIModel(object):

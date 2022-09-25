@@ -10,7 +10,7 @@ URLS = [
      (r'/api/apps', 'handler.api.AppListHandler'),
      (r'/api/posts', 'handler.api.PostListHandler'),
 
-     (r'/api/upyun', 'handler.api.UpyunHandler'),
+     # (r'/api/upyun', 'handler.api.UpyunHandler'),
      )
 ]
 

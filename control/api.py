@@ -15,7 +15,7 @@ class ApiCtrl(object):
         return 'all_apps'
 
     def get_app_list(self):
-        key = self.get_app_list_key_ctl()
+        key = self.get_app_list_key()
         ids = self.ctrl.rs.lrange(key, 0, -1)
         if ids:
             ids = [int(i) for i in ids]
@@ -29,7 +29,7 @@ class ApiCtrl(object):
         return apps
 
     def get_post_list(self, page=1, page_size=20):
-        key = self.get_post_list_key_ctl(page)
+        key = self.get_post_list_key(page)
         ids = self.ctrl.rs.lrange(key, 0, -1)
         if ids:
             ids = [int(i) for i in ids]

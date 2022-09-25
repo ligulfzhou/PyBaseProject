@@ -51,7 +51,7 @@ class TplsHandler(BaseHandler):
         /api/tpl
         获取所有模版
         '''
-        tpls = ctrl.api.get_tpls_ctl()
+        tpls = ctrl.api.get_app_list()
         self.send_json({
             'tpls': tpls
         })
