@@ -1,28 +1,13 @@
 # redis
-REDIS = {
-    'host': '127.0.0.1',
-    'port': 6379,
-    'db': 0,
-    'password': None
-}
+REDIS = 'redis://:@127.0.0.1/0'
 
-# mysql
 DB_OA = 'db'
-MYSQL_DB = {
+MY_DB = {
     DB_OA: {
-        'master': {
-            'host': '127.0.0.1',
-            'user': 'zlg',
-            'pass': 'MYSQLzlg153',
-            'port': 3306
-        },
+        'master': 'postgresql://username:password@127.0.0.1:5432/db',
         'slaves': [
-            {
-                'host': '127.0.0.1',
-                'user': 'zlg',
-                'pass': 'MYSQLzlg153',
-                'port': 3306
-            }
+            'postgresql://username:password@127.0.0.1:5432/db',
+            'postgresql://username:password@127.0.0.1:5432/db'
         ]
     }
 }

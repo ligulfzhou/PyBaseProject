@@ -1,15 +1,4 @@
-REDIS = {
-    'host': 'redis',
-    'port': 6379,
-    'db': 0,
-    'password': None
-}
+REDIS = 'redis://:@127.0.0.1/0'
 
-MYSQL_DB['db']['slaves'] = []
-MYSQL_DB['db']['master'] = {
-    'host': 'mysql',
-    'user': 'zlg',
-    'pass': 'MYSQLzlg153',
-    'port': 3306
-}
-
+MY_DB['db']['slaves'] = []
+MY_DB['db']['master'] = 'postgresql://ligulfzhou:POSTGRESzlg153@127.0.0.1:5432/xrplsniper'

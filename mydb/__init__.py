@@ -1,7 +1,7 @@
 import random
 import logging
-from settings import MYSQL_DB
-from mysql.api import APIModel
+from settings import MY_DB
+from mydb.api import APIModel
 from tornado.options import options
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -18,7 +18,6 @@ def create_session(engine):
 class Database(object):
 
     def __init__(self):
-        self.schema = 'mysql://%s:%s@%s:%d/%s?charset=utf8'
         self.session = {
             'm': {},
             's': {}
@@ -32,24 +31,23 @@ class Database(object):
         self.init_session()
         self.api = APIModel(self)
 
-    def _session(self, user, passwd, host, port, db, master=True):
-        schema = self.schema % (user, passwd, host, port, db)
-        engine = create_engine(schema, **self.kwargs)
+    def _session(self, db_str, master=True):
+        engine = create_engine(db_str, **self.kwargs)
         session = create_session(engine)
-        print('%s: %s' % ('master' if master else 'slave', schema))
+        print('%s: %s' % ('master' if master else 'slave', db_str))
         return session
 
     def init_session(self):
-        for db, value in MYSQL_DB.items():
+        for db, value in MY_DB.items():
             self.session['s'][db] = []
 
             master = value.get('master')
-            session = self._session(master['user'], master['pass'], master['host'], master['port'], db)
+            session = self._session(master)
             self.session['m'][db] = session
             slaves = value.get('slaves')
 
             for slave in slaves:
-                session = self._session(slave['user'], slave['pass'], slave['host'], slave['port'], db, master=False)
+                session = self._session(slave, master=False)
                 self.session['s'][db].append(session)
 
     def get_session(self, db, master=False):
@@ -69,16 +67,15 @@ class Database(object):
         return getattr(cls, name)
 
     def close(self):
-
         def shut(ins):
             try:
                 ins.commit()
             except:
-                logging.error('MySQL server has gone away. ignore.')
+                logging.error('DB server has gone away. ignore.')
             finally:
                 ins.close()
 
-        for db in MYSQL_DB:
+        for db in MY_DB:
             shut(self.session['m'][db])
             for session in self.session['s'][db]:
                 shut(session)
