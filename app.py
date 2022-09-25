@@ -1,19 +1,17 @@
 import os
 import sys
-
 from tornado import web
 from tornado.options import options
 from tornado.httpserver import HTTPServer
 
-
 URLS = [
     (r'sudo\.madan\.tech',
-        (r'/api/tpls', 'handler.api.TplsHandler'),
-        (r'/api/apps', 'handler.api.AppListHandler'),
-        (r'/api/posts', 'handler.api.PostListHandler'),
+     (r'/api/tpls', 'handler.api.TplsHandler'),
+     (r'/api/apps', 'handler.api.AppListHandler'),
+     (r'/api/posts', 'handler.api.PostListHandler'),
 
-        (r'/api/upyun', 'handler.api.UpyunHandler'),
-    )
+     (r'/api/upyun', 'handler.api.UpyunHandler'),
+     )
 ]
 
 
@@ -40,4 +38,3 @@ def run():
     http_server = HTTPServer(application, xheaders=True)
     http_server.listen(options.port)
     print('Running on port %d' % options.port)
-

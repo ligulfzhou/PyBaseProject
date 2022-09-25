@@ -1,17 +1,13 @@
-import re
 import json
 import logging
-import hashlib
 import traceback
 import datetime
-
 from decimal import Decimal
-from tornado import web, gen
+from tornado import web
 from tornado.options import options
 from control import ctrl
 from settings import ERR
 from lib import utils
-from urllib.parse import quote
 
 
 class BaseHandler(web.RequestHandler):
@@ -37,7 +33,7 @@ class BaseHandler(web.RequestHandler):
             return obj.strftime('%Y-%m-%d')
         if isinstance(obj, Decimal):
             return ('%.2f' % obj)
-        if isinstance(obj, None):
+        if not obj:
             return ''
 
     def has_argument(self, name):

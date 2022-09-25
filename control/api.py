@@ -1,19 +1,3 @@
-import pdb
-import json
-import random
-import pickle
-import datetime
-import logging
-import hashlib
-from copy import deepcopy
-from decimal import Decimal
-from tornado import gen
-from lib import utils
-from settings import A_DAY
-from tornado.gen import coroutine
-from tornado.options import options
-from tornado import httputil
-
 
 class ApiCtrl(object):
 
@@ -35,13 +19,13 @@ class ApiCtrl(object):
         ids = self.ctrl.rs.lrange(key, 0, -1)
         if ids:
             ids = [int(i) for i in ids]
-            return self.ctrl.base._get_multi_items_ctl('App', ids)
+            return self.ctrl.base._get_multi_items('App', ids)
 
         apps = self.api.get_models('App', [])
         if apps:
-            self.ctrl.base._put_multi_items_to_redis_ctl('App', apps)
+            self.ctrl.base._put_multi_items_to_redis('App', apps)
             cids = [c['id'] for c in apps]
-            self.ctrl.base._rpush_multi_ids_to_key_ctl(key, cids)
+            self.ctrl.base._rpush_multi_ids_to_key(key, cids)
         return apps
 
     def get_post_list(self, page=1, page_size=20):
@@ -49,13 +33,13 @@ class ApiCtrl(object):
         ids = self.ctrl.rs.lrange(key, 0, -1)
         if ids:
             ids = [int(i) for i in ids]
-            return self.ctrl.base._get_multi_items_ctl('Post', ids)
+            return self.ctrl.base._get_multi_items('Post', ids)
 
         posts = self.api.get_models('Post', [], page=page, page_size=page_size)
-        posts = self.ctrl.base.post_merge_more_fields_ctl(posts)
+        posts = self.ctrl.base.post_merge_more_fields(posts)
         if posts:
-            self.ctrl.base._put_multi_items_to_redis_ctl('Post', posts)
-            pids = [c['id'] for p in posts]
-            self.ctrl.base._rpush_multi_ids_to_key_ctl(key, pids)
+            self.ctrl.base._put_multi_items_to_redis('Post', posts)
+            pids = [p['id'] for p in posts]
+            self.ctrl.base._rpush_multi_ids_to_key(key, pids)
         return posts
 

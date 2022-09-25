@@ -1,16 +1,8 @@
-import pdb
-import time
-import json
-import random
 import logging
-import datetime
-import hashlib
-import random
-
 from lib import utils
 from control import ctrl
 from handler.base import BaseHandler
-from lib.decorator import login_required, permission_required, check_param_sign
+from lib.decorator import login_required
 
 
 class VerifyCodeHandler(BaseHandler):

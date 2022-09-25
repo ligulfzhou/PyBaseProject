@@ -1,18 +1,5 @@
-import pdb
-import json
-import random
 import pickle
-import datetime
-import logging
-import hashlib
-from copy import deepcopy
-from decimal import Decimal
-from tornado import gen
-from lib import utils
 from settings import A_DAY
-from tornado.gen import coroutine
-from tornado.options import options
-from tornado import httputil
 from functools import partial
 
 
@@ -73,8 +60,6 @@ class BaseCtrl(object):
             return
         effi_ids = [i['id'] for i in effis]
         id_hot_dict = self.ctrl.api.get_effi_hot_cnts_ctl(effi_ids)
-        print("===============returned id_hot_dict================")
-        print(id_hot_dict)
         [effi.update({
             'hot': id_hot_dict.get(effi['id'], 0)
         }) for effi in effis]

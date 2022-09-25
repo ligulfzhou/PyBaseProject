@@ -1,21 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-import pdb
-import time
-import json
-import random
 import logging
-import datetime
-import hashlib
-import random
-
-from lib import utils, upyun
+from lib import utils
 from control import ctrl
-from settings import UPYUN
-from tornado.options import options
 from handler.base import BaseHandler
-from lib.decorator import login_required
 
 
 class AppListHandler(BaseHandler):
@@ -71,14 +57,14 @@ class TplsHandler(BaseHandler):
         })
 
 
-class UpyunHandler(BaseHandler):
-
-    @login_required
-    def get(self):
-        upyun_data = upyun.form_signature_policy({
-            'save-key': '{filemd5}{.suffix}',
-            'bucket': 'madan-image',
-            'content-length-range': '1, 1073741824'
-        })
-
-        self.send_json(dict(upyun=upyun_data, CDN_HOST=UPYUN['cdn']))
+# class UpyunHandler(BaseHandler):
+#
+#     @login_required
+#     def get(self):
+#         upyun_data = upyun.form_signature_policy({
+#             'save-key': '{filemd5}{.suffix}',
+#             'bucket': 'madan-image',
+#             'content-length-range': '1, 1073741824'
+#         })
+#
+#         self.send_json(dict(upyun=upyun_data, CDN_HOST=UPYUN['cdn']))

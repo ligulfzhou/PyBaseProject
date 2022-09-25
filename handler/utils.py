@@ -1,21 +1,8 @@
 import os
-import pdb
-import time
-import json
-import random
-import logging
 import datetime
-import hashlib
 import random
-
-from PIL import Image
-from io import StringIO, BytesIO
-from lib import utils
-from control import ctrl
-from urllib.parse import unquote
-from tornado.web import stream_request_body
 from handler.base import BaseHandler
-from lib.decorator import login_required, check_param_sign
+from lib.decorator import login_required
 
 
 class UploadHandler(BaseHandler):
@@ -45,7 +32,6 @@ class UploadHandler(BaseHandler):
 
             with open(filepath, 'wb') as file:
                 file.write(f['body'])
-
             break
 
         # utils.read_excel(self.request.protocol + '://' + self.request.full_url().split('/')[2] + url, 0)

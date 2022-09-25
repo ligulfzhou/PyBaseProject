@@ -29,5 +29,4 @@ def parse(txt, output='schema.txt'):
 
 
 if __name__ == '__main__':
-    parsed = parse(sys.argv[1])
-
+    parse(sys.argv[1])

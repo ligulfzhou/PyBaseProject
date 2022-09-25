@@ -1,21 +1,14 @@
 import os
-import pdb
-import time
 import math
 import base64
 import json
 import random
 import logging
 import datetime
-
 from openpyxl import load_workbook
-
-from decimal import Decimal
 from tornado import web, httpclient
-from tornado.gen import coroutine
 from tornado.httputil import url_concat
 from tornado.options import options
-
 
 if not options.debug:
     httpclient.AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient', max_clients=300)
@@ -32,25 +25,30 @@ def dict_filter(target, attr=()):
             result[p] = target[p]
     return result
 
+
 class APIError(web.HTTPError):
     '''
     自定义API异常
     '''
+
     def __init__(self, status_code=200, *args, **kwargs):
         super(APIError, self).__init__(status_code, *args, **kwargs)
         self.kwargs = kwargs
 
+
 def http_request(url, connect_timeout=10, request_timeout=10, **kwargs):
     return httpclient.HTTPRequest(url=url, connect_timeout=connect_timeout, request_timeout=request_timeout, **kwargs)
+
 
 def get_async_client():
     http_client = httpclient.AsyncHTTPClient()
     return http_client
 
+
 async def fetch_api(url, method='GET', params={}, body={}, raw=0):
     url = url_concat(url, params)
     client = get_async_client()
-    request = httpclient.HTTPRequest(url=url, method=method, body=None if method=='GET' else json.dumps(body),
+    request = httpclient.HTTPRequest(url=url, method=method, body=None if method == 'GET' else json.dumps(body),
                                      connect_timeout=10, request_timeout=10)
     try:
         response = await client.fetch(request)
@@ -61,8 +59,9 @@ async def fetch_api(url, method='GET', params={}, body={}, raw=0):
         return response
     except Exception as e:
         logging.error(e)
-        logging.error('url: %s, method: %s, params: %s, body: %s'%(url, method, params, body))
+        logging.error('url: %s, method: %s, params: %s, body: %s' % (url, method, params, body))
         raise
+
 
 def read_excel(url, tp):
     '''
@@ -75,6 +74,7 @@ def read_excel(url, tp):
     3  计薪月度 姓名  证件号码  产品名  统计数
     4  计薪月度 姓名  证件号码  借款  奖金
     '''
+
     def get_year(month):
         now = datetime.datetime.now()
         y, m = now.year, now.month
@@ -82,13 +82,13 @@ def read_excel(url, tp):
             return y - 1
         return y
 
-    file_path =  os.path.dirname(os.path.dirname(__file__)) + '/static/upload/' + url.split('/')[-1]
+    file_path = os.path.dirname(os.path.dirname(__file__)) + '/static/upload/' + url.split('/')[-1]
     wb = load_workbook(file_path)
     sheet = wb.get_active_sheet()
 
     res = []
     rows = [row for row in sheet.rows]
-    if tp==0:
+    if tp == 0:
         for row in rows[1:]:
             if not row[0].value:
                 break
@@ -110,7 +110,7 @@ def read_excel(url, tp):
                 'absent_hours': absent
             })
         return res
-    elif tp==1:
+    elif tp == 1:
         for row in rows[1:]:
             if not row[0].value:
                 break
@@ -126,20 +126,20 @@ def read_excel(url, tp):
                 'count': float(row[4].value)
             })
         return res
-    elif tp==2:
+    elif tp == 2:
         for row in rows[1:]:
             if not row[0].value:
                 break
 
             res.append({
-                'number':  row[0].value,
-                'username':  row[1].value,
-                'phone_num':  row[2].value,
-                'qq_account':  row[3].value,
-                'wechat_account':  row[4].value
+                'number': row[0].value,
+                'username': row[1].value,
+                'phone_num': row[2].value,
+                'qq_account': row[3].value,
+                'wechat_account': row[4].value
             })
         return res
-    elif tp==3:
+    elif tp == 3:
         for row in rows[1:]:
             if not row[0].value:
                 break
@@ -155,7 +155,7 @@ def read_excel(url, tp):
                 'count': float(row[4].value)
             })
         return res
-    elif tp==4:
+    elif tp == 4:
         for row in rows[1:]:
             if not row[0].value:
                 break
@@ -178,6 +178,7 @@ def read_excel(url, tp):
             })
         return res
 
+
 def get_overtime_initial_value(single_week_hours, double_week_hours):
     '''
     工作日加班工时初始值
@@ -185,40 +186,6 @@ def get_overtime_initial_value(single_week_hours, double_week_hours):
     '''
     return (single_week_hours + double_week_hours) * 2.175 - 174
 
-def calc_tax(money):
-    to_calc = money - 5000
-    res = 0
-    if to_calc <= 3000:
-        res += to_calc * 0.03
-        return res
-
-    res += 3000 * 0.03
-    if to_calc <= 12000:
-        res += (to_calc - 3000) * 0.1
-        return res
-
-    res += (12000 - 3000) * 0.1
-    if to_calc <= 25000:
-        res + (to_calc - 12000) * 0.2
-        return res
-
-    res += (25000 - 12000) * 0.2
-    if to_calc <= 35000:
-        res += (to_calc - 25000) * 0.25
-        return res
-
-    res += (35000 - 25000) * 0.25
-    if to_calc <= 55000:
-        res += (to_calc - 35000) * 0.3
-        return res
-
-    res += (55000 - 35000) * 0.3
-    if to_calc <= 80000:
-        res += (to_calc - 55000) * 0.35
-        return res
-
-    res += (to_calc - 80000) * 0.45
-    return res
 
 def sum_list_columns(datas, to_sum_columns=[], attached_dict={}):
     data = {}
@@ -230,6 +197,7 @@ def sum_list_columns(datas, to_sum_columns=[], attached_dict={}):
     data.update(attached_dict)
     return data
 
+
 def filter_empty_valued_keys(d, no_use_keys=[]):
     res = {}
     for i, j in d.items():
@@ -240,10 +208,3 @@ def filter_empty_valued_keys(d, no_use_keys=[]):
             i: j
         })
     return res
-
-def encode_company_id(cid):
-    return base64.b64encode(("%03dcid:%s:%04d" % (random.randint(0, 999), (cid**2+5)*1000 + random.randint(0, 999), random.randint(0, 9999))).encode()).decode()
-
-def decode_company_id(cid_str):
-    s = base64.b64decode(cid_str.encode()).decode()
-    return int(math.sqrt(int(s.split(':')[1]) // 1000 - 5))

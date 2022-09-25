@@ -5,8 +5,8 @@ from sqlalchemy.dialects.mysql import TIMESTAMP, DATETIME
 
 NotNullColumn = partial(Column, nullable=False, server_default='')
 
-class declare_base(object):
 
+class declare_base(object):
     create_time = NotNullColumn(DATETIME, server_default='CURRENT_TIMESTAMP')
     update_time = NotNullColumn(TIMESTAMP, server_default='CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
 
@@ -17,5 +17,5 @@ class declare_base(object):
             'mysql_charset': 'utf8'
         }
 
-Base = declarative_base(cls=declare_base)
 
+Base = declarative_base(cls=declare_base)

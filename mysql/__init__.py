@@ -1,12 +1,10 @@
 import random
 import logging
-
+from settings import MYSQL_DB
+from mysql.api import APIModel
 from tornado.options import options
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-
-from settings import MYSQL_DB
-from mysql.api import APIModel
 
 
 def create_session(engine):

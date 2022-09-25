@@ -1,13 +1,11 @@
+import app
 import tornado.ioloop
-
 from tornado.options import define, options
 
 define('port', default=8000, help='run on this port', type=int)
 define('debug', default=True, help='enable debug mode')
 
 options.parse_command_line()
-
-import app
 
 
 def runserver():
